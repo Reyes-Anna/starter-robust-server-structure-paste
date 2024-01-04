@@ -1,7 +1,14 @@
 const express = require("express");
 const app = express();
+const pastesRouter = require("./pastes/pastes.router")
 
 // TODO: Follow instructions in the checkpoint to implement ths API.
+const pastes = require("./data/pastes-data");
+app.use(express.json())
+
+
+app.use("/pastes", pastesRouter) // Note:app.use
+
 
 // Not found handler
 app.use((request, response, next) => {
@@ -11,7 +18,8 @@ app.use((request, response, next) => {
 // Error handler
 app.use((error, request, response, next) => {
   console.error(error);
-  response.send(error);
+  const { status = 500, message = "Something went wrong here!"} = error
+  response.status(status).json({ error: message })
 });
 
 module.exports = app;
